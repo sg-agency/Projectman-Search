@@ -4,408 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1440">
   <title>Projectman – Vyhledávání</title>
-  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; background: #F7F7F7; width: 1440px; color: #333333; }
 
-    body {
-      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      background: #F7F7F7;
-      width: 1440px;
-      color: #333333;
-    }
+    /* HEADER */
+    header { width: 1440px; height: 72px; background: #FFFFFF; border-bottom: 1px solid #E0E0E0; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-dots { display: grid; grid-template-columns: repeat(5, 5px); gap: 4px; }
+    .logo-dots span { width: 5px; height: 5px; background: #444444; border-radius: 50%; display: block; }
+    .logo-text { font-size: 18px; font-weight: 600; color: #333333; }
+    nav { display: flex; align-items: center; gap: 32px; }
+    .nav-item { font-size: 14px; font-weight: 500; color: #555555; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .nav-arrow { font-size: 9px; opacity: 0.4; }
+    .search-icon-btn { width: 36px; height: 36px; background: #888888; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-    /* ---- HEADER ---- */
-    header {
-      width: 1440px;
-      height: 72px;
-      background: #FFFFFF;
-      border-bottom: 1px solid #E0E0E0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 80px;
-    }
+    /* SEARCH AREA */
+    .search-area { padding: 48px 80px 0; background: #F7F7F7; }
+    .search-bar-wrapper { max-width: 760px; margin: 0 auto; position: relative; }
+    .search-label { font-size: 12px; font-weight: 600; color: #888888; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 14px; }
+    .search-input-container { display: flex; align-items: center; background: #FFFFFF; border: 1.5px solid #CCCCCC; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); position: relative; z-index: 20; }
+    .search-input-container.focused { border-color: #888888; border-radius: 10px 10px 0 0; }
+    .search-input-icon { padding: 0 14px 0 20px; color: #888888; }
+    .search-input { flex: 1; height: 58px; border: none; outline: none; font-size: 18px; color: #333333; background: transparent; font-family: inherit; }
+    .search-clear { padding: 0 10px; color: #AAAAAA; cursor: pointer; display: none; }
+    .search-divider { width: 1px; height: 26px; background: #DDDDDD; margin: 0 4px; }
+    .search-btn { margin: 6px; padding: 0 22px; height: 46px; background: #555555; color: #FFFFFF; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    /* NAŠEPTÁVAČ DROPDOWN */
+    .suggestions-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #FFFFFF; border: 1.5px solid #888888; border-top: 1px solid #EEEEEE; border-radius: 0 0 10px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 19; overflow: hidden; }
+    .suggestions-dropdown.visible { display: block; }
+    .sug-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #AAAAAA; padding: 12px 20px 6px; }
+    .sug-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; }
+    .sug-item:hover { background: #F5F5F5; }
+    .sug-item.recommended { background: #FAFAFA; }
+    .sug-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #666666; }
+    .sug-icon.rec { background: #AAAAAA; }
+    .sug-icon.normal { background: #F0F0F0; }
+    .sug-content { flex: 1; }
+    .sug-title { font-size: 14px; font-weight: 600; color: #333333; }
+    .sug-title mark { background: none; font-weight: 800; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; color: #333333; }
+    .sug-meta { font-size: 11px; color: #999999; margin-top: 1px; }
+    .sug-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; background: #555555; color: #FFFFFF; padding: 1px 6px; border-radius: 3px; flex-shrink: 0; }
+    .sug-tag { font-size: 11px; color: #888888; }
+    .sug-divider { height: 1px; background: #F0F0F0; margin: 4px 0; }
 
-    .logo-dots {
-      display: grid;
-      grid-template-columns: repeat(5, 5px);
-      gap: 4px;
-    }
+    /* VÝSLEDKY */
+    .results-area { max-width: 760px; margin: 32px auto 64px; display: none; }
+    .results-area.visible { display: block; }
 
-    .logo-dots span {
-      width: 5px;
-      height: 5px;
-      background: #444444;
-      border-radius: 50%;
-      display: block;
-    }
+    .category-group { margin-bottom: 40px; }
+    .category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #E0E0E0; }
+    .category-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #555555; }
+    .category-count { font-size: 12px; color: #AAAAAA; font-weight: 500; }
 
-    .logo-text {
-      font-size: 18px;
-      font-weight: 600;
-      color: #333333;
-      letter-spacing: -0.3px;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 36px;
-    }
-
-    .nav-item {
-      font-size: 15px;
-      font-weight: 500;
-      color: #555555;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .nav-arrow { font-size: 10px; opacity: 0.45; }
-
-    .search-icon-btn {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #888888;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    /* ---- SEARCH BAR ---- */
-    .search-area {
-      padding: 56px 80px 0;
-      background: #F7F7F7;
-    }
-
-    .search-bar-wrapper {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .search-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #888888;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-bottom: 14px;
-    }
-
-    .search-input-container {
-      display: flex;
-      align-items: center;
-      background: #FFFFFF;
-      border: 1.5px solid #CCCCCC;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    }
-
-    .search-input-icon {
-      padding: 0 14px 0 20px;
-      color: #888888;
-    }
-
-    .search-input {
-      flex: 1;
-      height: 58px;
-      border: none;
-      outline: none;
-      font-size: 18px;
-      font-weight: 400;
-      color: #333333;
-      background: transparent;
-      font-family: inherit;
-    }
-
-    .search-input::placeholder { color: #BBBBBB; }
-
-    .search-clear {
-      padding: 0 10px;
-      color: #AAAAAA;
-      cursor: pointer;
-    }
-
-    .search-divider {
-      width: 1px;
-      height: 26px;
-      background: #DDDDDD;
-      margin: 0 4px;
-    }
-
-    .search-btn {
-      margin: 6px;
-      padding: 0 22px;
-      height: 46px;
-      background: #555555;
-      color: #FFFFFF;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-
-    /* ---- PILLAR FILTER ---- */
-    .pillar-filter {
-      max-width: 760px;
-      margin: 20px auto 0;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .pillar-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #888888;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-right: 4px;
-    }
-
-    .pillar-chip {
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1.5px solid #DDDDDD;
-      background: #FFFFFF;
-      color: #444444;
-    }
-
-    .pillar-chip.active {
-      background: #555555;
-      color: #FFFFFF;
-      border-color: #555555;
-    }
-
-    /* ---- MAIN CONTENT ---- */
-    .results-area {
-      max-width: 760px;
-      margin: 32px auto 64px;
-    }
-
-    /* ---- TABS ---- */
-    .tabs {
-      display: flex;
-      gap: 0;
-      border-bottom: 2px solid #E0E0E0;
-      margin-bottom: 28px;
-    }
-
-    .tab-btn {
-      padding: 12px 24px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #888888;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: color 0.15s;
-    }
-
-    .tab-btn:hover { color: #555555; }
-
-    .tab-btn.active {
-      color: #333333;
-      border-bottom-color: #333333;
-    }
-
-    .tab-count {
-      font-size: 12px;
-      font-weight: 600;
-      background: #EEEEEE;
-      color: #666666;
-      padding: 1px 7px;
-      border-radius: 10px;
-    }
-
-    .tab-btn.active .tab-count {
-      background: #555555;
-      color: #FFFFFF;
-    }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    .recommended-block {
-      border: 1.5px solid #DDDDDD;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 40px;
-      background: #FFFFFF;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    .rec-item {
-      padding: 20px 24px;
-      border-bottom: 1px solid #EEEEEE;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .rec-item:last-child { border-bottom: none; }
-
-    .rec-icon {
-      width: 40px;
-      height: 40px;
-      background: #AAAAAA;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .rec-content { flex: 1; }
-
-    .rec-breadcrumb {
-      font-size: 11px;
-      font-weight: 600;
-      color: #999999;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 5px;
-    }
-
-    .rec-breadcrumb span { color: #555555; }
-
-    .rec-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #333333;
-      margin-bottom: 5px;
-      line-height: 1.35;
-    }
-
-    .rec-desc {
-      font-size: 13px;
-      color: #555555;
-      line-height: 1.55;
-      margin-bottom: 10px;
-    }
-
-    .rec-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 4px;
-      border: 1.5px solid #DDDDDD;
-      color: #555555;
-      background: #FFFFFF;
-    }
-
-    .tag.dark {
-      background: #777777;
-      color: #FFFFFF;
-      border-color: #777777;
-    }
-
-    .rec-meta {
-      font-size: 12px;
-      color: #999999;
-      margin-top: 8px;
-    }
-
-    /* ---- VÝSLEDKY VYHLEDÁVÁNÍ ---- */
-    .result-item {
-      padding: 22px 0;
-      border-bottom: 1px solid #EEEEEE;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .result-item:first-child { border-top: 1px solid #EEEEEE; }
-
-    .result-icon {
-      width: 36px;
-      height: 36px;
-      background: #F2F2F2;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      color: #666666;
-    }
-
+    /* STANDARDNÍ VÝSLEDEK */
+    .result-item { padding: 18px 0; border-bottom: 1px solid #EEEEEE; display: flex; gap: 16px; align-items: flex-start; }
+    .result-icon { width: 34px; height: 34px; background: #F2F2F2; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; color: #777777; }
     .result-content { flex: 1; }
+    .result-breadcrumb { font-size: 11px; font-weight: 600; color: #AAAAAA; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 3px; }
+    .result-breadcrumb span { color: #777777; }
+    .result-title { font-size: 15px; font-weight: 600; color: #333333; margin-bottom: 4px; line-height: 1.35; }
+    .result-title mark { background: none; font-weight: 800; color: #333333; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    .result-desc { font-size: 13px; color: #666666; line-height: 1.55; margin-bottom: 7px; }
+    .result-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; border: 1.5px solid #DDDDDD; color: #555555; background: #FFFFFF; }
+    .tag.dark { background: #777777; color: #FFFFFF; border-color: #777777; }
 
-    .result-breadcrumb {
-      font-size: 11px;
-      font-weight: 600;
-      color: #999999;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      margin-bottom: 4px;
-    }
-
-    .result-breadcrumb span { color: #666666; }
-
-    .result-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #333333;
-      margin-bottom: 5px;
-      line-height: 1.35;
-    }
-
-    .result-title mark {
-      background: none;
-      font-weight: 800;
-      color: #333333;
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 2px;
-    }
-
-    .result-desc {
-      font-size: 13px;
-      color: #666666;
-      line-height: 1.55;
-      margin-bottom: 8px;
-    }
-
-    .result-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    /* DOPORUČENÝ VÝSLEDEK */
+    .rec-item { padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start; background: #FFFFFF; border: 1.5px solid #DDDDDD; border-radius: 10px; margin-bottom: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    .rec-icon { width: 38px; height: 38px; background: #AAAAAA; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .rec-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .rec-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; background: #555555; color: #FFFFFF; padding: 2px 7px; border-radius: 3px; }
+    .rec-breadcrumb { font-size: 11px; font-weight: 600; color: #AAAAAA; text-transform: uppercase; letter-spacing: 0.7px; }
+    .rec-breadcrumb span { color: #777777; }
+    .rec-title { font-size: 15px; font-weight: 700; color: #333333; margin-bottom: 4px; line-height: 1.35; }
+    .rec-desc { font-size: 13px; color: #555555; line-height: 1.55; margin-bottom: 7px; }
+    .rec-tags { display: flex; gap: 5px; flex-wrap: wrap; }
 
     svg { display: block; }
   </style>
@@ -414,13 +89,8 @@
 
   <!-- HEADER -->
   <header>
-    <a class="logo" href="#">
-      <div class="logo-dots">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
+    <a class="logo" href="hp.html" id="logoLink">
+      <div class="logo-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <span class="logo-text">Projectman</span>
     </a>
     <nav>
@@ -429,245 +99,384 @@
       <a class="nav-item" href="#">Know-how <span class="nav-arrow">▾</span></a>
       <a class="nav-item" href="#">O nás <span class="nav-arrow">▾</span></a>
       <span class="nav-item">CZ <span class="nav-arrow">▾</span></span>
-      <div class="search-icon-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </div>
+      <div class="search-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
     </nav>
   </header>
 
-  <!-- SEARCH AREA -->
+  <!-- SEARCH BAR -->
   <div class="search-area">
     <div class="search-bar-wrapper">
       <p class="search-label">Hledejte projekty, firmy a profesionály</p>
-      <div class="search-input-container">
-        <div class="search-input-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </div>
-        <input class="search-input" type="text" value="AI ve automotive">
-        <div class="search-clear">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </div>
+      <div class="search-input-container" id="searchContainer">
+        <div class="search-input-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input class="search-input" id="searchInput" type="text" placeholder="Hledat projekty, firmy, role...">
+        <div class="search-clear" id="clearBtn" onclick="clearSearch()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
         <div class="search-divider"></div>
-        <button class="search-btn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          Hledat
-        </button>
+        <button class="search-btn" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Hledat</button>
       </div>
-    </div>
 
-    <!-- PILLAR FILTER -->
-    <div class="pillar-filter">
-      <span class="pillar-label">Filtr:</span>
-      <span class="pillar-chip active">Vše</span>
-      <span class="pillar-chip">Pro firmy</span>
-      <span class="pillar-chip">Pro profesionály</span>
-      <span class="pillar-chip">Know-how</span>
+      <!-- NAŠEPTÁVAČ -->
+      <div class="suggestions-dropdown" id="suggestionsDropdown">
+
+        <!-- Výchozí stav: jen doporučené -->
+        <div id="sugDefault">
+          <div class="sug-section-label">Doporučujeme</div>
+          <div class="sug-item recommended" onclick="selectSuggestion('AI Hackathon')">
+            <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title">AI Hackathon</div>
+              <div class="sug-meta">Know-how › Akce › Hackathon</div>
+            </div>
+            <span class="sug-badge">Doporučené</span>
+          </div>
+          <div class="sug-item recommended" onclick="selectSuggestion('Webinář: AI v průmyslu')">
+            <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title">Webinář: AI v průmyslu</div>
+              <div class="sug-meta">Know-how › Webinář</div>
+            </div>
+            <span class="sug-badge">Doporučené</span>
+          </div>
+          <div class="sug-item recommended" onclick="selectSuggestion('PM Konference 2026')">
+            <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title">PM Konference 2026 – AI &amp; Industry 4.0</div>
+              <div class="sug-meta">Know-how › Konference</div>
+            </div>
+            <span class="sug-badge">Doporučené</span>
+          </div>
+          <div class="sug-item recommended" onclick="selectSuggestion('Šablona: AI projekt charter')">
+            <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title">Šablona: AI projekt charter</div>
+              <div class="sug-meta">Know-how › Šablona</div>
+            </div>
+            <span class="sug-badge">Doporučené</span>
+          </div>
+        </div>
+
+        <!-- Stav při psaní: návrhy podle dotazu -->
+        <div id="sugTyping" style="display:none;">
+          <div class="sug-section-label" id="sugLabel">Návrhy</div>
+
+          <div class="sug-item" onclick="selectSuggestion(this.querySelector('.sug-title').textContent)">
+            <div class="sug-icon normal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title" id="s1t"></div>
+              <div class="sug-meta" id="s1m"></div>
+            </div>
+            <span class="sug-tag" id="s1c"></span>
+          </div>
+
+          <div class="sug-item" onclick="selectSuggestion(this.querySelector('.sug-title').textContent)">
+            <div class="sug-icon normal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title" id="s2t"></div>
+              <div class="sug-meta" id="s2m"></div>
+            </div>
+            <span class="sug-tag" id="s2c"></span>
+          </div>
+
+          <div class="sug-item recommended" onclick="selectSuggestion(this.querySelector('.sug-title').textContent)">
+            <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title" id="s3t"></div>
+              <div class="sug-meta" id="s3m"></div>
+            </div>
+            <span class="sug-badge">Doporučené</span>
+          </div>
+
+          <div class="sug-item" onclick="selectSuggestion(this.querySelector('.sug-title').textContent)">
+            <div class="sug-icon normal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title" id="s4t"></div>
+              <div class="sug-meta" id="s4m"></div>
+            </div>
+            <span class="sug-tag" id="s4c"></span>
+          </div>
+
+          <div class="sug-item" onclick="selectSuggestion(this.querySelector('.sug-title').textContent)">
+            <div class="sug-icon normal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="sug-content">
+              <div class="sug-title" id="s5t"></div>
+              <div class="sug-meta" id="s5m"></div>
+            </div>
+            <span class="sug-tag" id="s5c"></span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <!-- RESULTS -->
-  <div class="results-area">
+  <!-- VÝSLEDKY (skupiny dle kategorie) -->
+  <div class="results-area" id="resultsArea">
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('doporucujeme', this)">
-        Doporučujeme <span class="tab-count">3</span>
-      </button>
-      <button class="tab-btn" onclick="switchTab('vysledky', this)">
-        Výsledky vyhledávání <span class="tab-count">14</span>
-      </button>
-    </div>
-
-    <!-- TAB: DOPORUČUJEME -->
-    <div id="doporucujeme" class="tab-panel active">
-    <div class="recommended-block">
-
-      <!-- Rec 1: Hackathon -->
-      <div class="rec-item">
-        <div class="rec-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </div>
-        <div class="rec-content">
-          <div class="rec-breadcrumb">Know-how <span>› Akce › Hackathon</span></div>
-          <div class="rec-title">AI Hackathon – Umělá inteligence na reálném projektu</div>
-          <div class="rec-desc">Intenzivní týmový workshop, kde si vyzkoušíte práci s AI na skutečném projektu. Pracujete v týmech, hledáte nápady, tvoříte prototypy a soutěžíte o nejlepší řešení. Ideální pro manažery z průmyslu a automotive.</div>
-          <div class="rec-tags">
-            <span class="tag dark">AI</span>
-            <span class="tag dark">Automotive</span>
-            <span class="tag">Workshop</span>
-            <span class="tag">Inovace</span>
-            <span class="tag">Firemní vzdělávání</span>
-          </div>
-        </div>
+    <!-- PRO PROFESIONÁLY -->
+    <div class="category-group" data-category="Pro profesionály">
+      <div class="category-header">
+        <span class="category-title">Pro profesionály</span>
+        <span class="category-count">3 výsledky</span>
       </div>
 
-      <!-- Rec 2: Webinář -->
-      <div class="rec-item">
-        <div class="rec-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
-          </svg>
-        </div>
-        <div class="rec-content">
-          <div class="rec-breadcrumb">Know-how <span>› Webinář</span></div>
-          <div class="rec-title">Webinář: AI v průmyslu – jak řídit projekty digitální transformace v automotive</div>
-          <div class="rec-desc">Online setkání pro projektové manažery a lídry z průmyslu. Zaměřujeme se na konkrétní use cases nasazení AI v automotive a výrobních dodavatelských řetězcích.</div>
-          <div class="rec-tags">
-            <span class="tag dark">AI</span>
-            <span class="tag dark">Automotive</span>
-            <span class="tag">Webinář</span>
-            <span class="tag">Digitální transformace</span>
-            <span class="tag">Zdarma</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rec 3: Konference -->
-      <div class="rec-item">
-        <div class="rec-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-        <div class="rec-content">
-          <div class="rec-breadcrumb">Know-how <span>› Konference</span></div>
-          <div class="rec-title">PM Konference 2026 – sekce AI &amp; Industry 4.0</div>
-          <div class="rec-desc">Největší česká konference projektového řízení s dedikovanou sekcí pro AI ve výrobních odvětvích — automotive, strojírenství a průmyslovou digitalizaci.</div>
-          <div class="rec-tags">
-            <span class="tag dark">Konference</span>
-            <span class="tag dark">AI</span>
-            <span class="tag">Industry 4.0</span>
-            <span class="tag">Automotive</span>
-            <span class="tag">Networking</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    </div><!-- /tab-panel doporucujeme -->
-
-    <!-- TAB: VÝSLEDKY -->
-    <div id="vysledky" class="tab-panel">
-    <div class="results-block">
-
-      <!-- Result 1 – Pro firmy -->
       <div class="result-item">
-        <div class="result-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-          </svg>
-        </div>
-        <div class="result-content">
-          <div class="result-breadcrumb">Pro firmy <span>› Outsourcing projektového řízení</span></div>
-          <div class="result-title">Řízení <mark>AI</mark> iniciativ v <mark>automotive</mark> – outsourcing PM</div>
-          <div class="result-desc">Posilujeme delivery kapacity firem v oblasti AI projektů. Spravujeme portfolio 20+ iniciativ napříč vývojovými týmy, včetně projektů v průmyslovém a automotive sektoru.</div>
-          <div class="result-tags">
-            <span class="tag">Pro firmy</span>
-            <span class="tag">Outsourcing PM</span>
-            <span class="tag">AI</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Result 2 – Know-how -->
-      <div class="result-item">
-        <div class="result-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
-        </div>
-        <div class="result-content">
-          <div class="result-breadcrumb">Know-how <span>› Článek</span></div>
-          <div class="result-title">Jak řídit projekty digitální transformace v <mark>automotive</mark></div>
-          <div class="result-desc">Automotive prochází zásadní proměnou — elektromobilita, autonomní řízení a AI mění celý hodnotový řetězec. Jak nastavit projektové řízení, aby transformace proběhla úspěšně?</div>
-          <div class="result-tags">
-            <span class="tag">Know-how</span>
-            <span class="tag">Digitální transformace</span>
-            <span class="tag">Automotive</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Result 3 – Pro profesionály -->
-      <div class="result-item">
-        <div class="result-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="result-content">
           <div class="result-breadcrumb">Pro profesionály <span>› Kariéra</span></div>
-          <div class="result-title">Projektový manažer pro <mark>AI</mark> projekty – <mark>automotive</mark> sektor</div>
-          <div class="result-desc">Hledáme zkušeného PM pro vedení AI implementačních projektů u předního výrobce automotive. Zkušenost s agilními metodikami a průmyslovými projekty výhodou.</div>
-          <div class="result-tags">
-            <span class="tag">Pro profesionály</span>
-            <span class="tag">Kariéra</span>
-            <span class="tag">AI</span>
-            <span class="tag">Automotive</span>
-          </div>
+          <div class="result-title">Projektový manažer pro <mark>AI</mark> projekty</div>
+          <div class="result-desc">Hledáme zkušeného PM pro vedení AI implementačních projektů. Zkušenost s agilními metodikami výhodou.</div>
+          <div class="result-tags"><span class="tag">Kariéra</span><span class="tag">AI</span></div>
         </div>
       </div>
 
-      <!-- Result 4 – Know-how -->
       <div class="result-item">
-        <div class="result-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Pro profesionály <span>› Profil experta</span></div>
+          <div class="result-title"><mark>AI</mark> Product Owner – expert na platformy strojového učení</div>
+          <div class="result-desc">Zkušený Product Owner specializující se na AI/ML produkty. Dostupný pro projekty od Q2 2026.</div>
+          <div class="result-tags"><span class="tag">Profil</span><span class="tag">AI</span><span class="tag">Product Owner</span></div>
         </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Pro profesionály <span>› Komunita</span></div>
+          <div class="result-title">Síť expertů na <mark>AI</mark> v projektovém řízení</div>
+          <div class="result-desc">Propojte se s dalšími odborníky, kteří pracují na AI projektech a sdílejí zkušenosti v naší komunitě.</div>
+          <div class="result-tags"><span class="tag">Komunita</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRO FIRMY -->
+    <div class="category-group" data-category="Pro firmy">
+      <div class="category-header">
+        <span class="category-title">Pro firmy</span>
+        <span class="category-count">3 výsledky</span>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Pro firmy <span>› Outsourcing PM</span></div>
+          <div class="result-title">Řízení <mark>AI</mark> iniciativ – outsourcing projektového managementu</div>
+          <div class="result-desc">Posilujeme delivery kapacity firem v oblasti AI projektů. Spravujeme portfolio 20+ iniciativ napříč vývojovými týmy.</div>
+          <div class="result-tags"><span class="tag">Outsourcing PM</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Pro firmy <span>› Konzultace</span></div>
+          <div class="result-title">Nastavení <mark>AI</mark> strategie pro firmy</div>
+          <div class="result-desc">Pomáháme firmám nastavit strategii pro nasazení AI — od definice use cases přes výběr technologií až po řízení portfolia.</div>
+          <div class="result-tags"><span class="tag">Strategie</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Pro firmy <span>› Case study</span></div>
+          <div class="result-title">Case study: nasazení <mark>AI</mark> do agendy projektového portfolia</div>
+          <div class="result-desc">Jak jsme pomohli finanční instituci zavést AI do řízení portfolia 20+ projektů a snížit reporting overhead o 40 %.</div>
+          <div class="result-tags"><span class="tag">Case study</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KNOW-HOW (Doporučené jako první) -->
+    <div class="category-group" data-category="Know-how">
+      <div class="category-header">
+        <span class="category-title">Know-how</span>
+        <span class="category-count">6 výsledků</span>
+      </div>
+
+      <!-- Doporučené první -->
+      <div class="rec-item">
+        <div class="rec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="result-content">
+          <div class="rec-header"><span class="rec-badge">Doporučené</span><span class="rec-breadcrumb">Know-how <span>› Akce › Hackathon</span></span></div>
+          <div class="rec-title">AI Hackathon – Umělá inteligence na reálném projektu</div>
+          <div class="rec-desc">Intenzivní týmový workshop, kde si vyzkoušíte práci s AI na skutečném projektu. Pracujete v týmech, hledáte nápady a tvoříte prototypy.</div>
+          <div class="rec-tags"><span class="tag dark">AI</span><span class="tag">Workshop</span><span class="tag">Inovace</span></div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Know-how <span>› Článek</span></div>
+          <div class="result-title"><mark>AI</mark> v projektovém řízení – kde začít?</div>
+          <div class="result-desc">Přehled nástrojů a přístupů, jak využívat umělou inteligenci v každodenní práci projektového manažera.</div>
+          <div class="result-tags"><span class="tag">Článek</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <div class="result-content">
           <div class="result-breadcrumb">Know-how <span>› Kurzy a tréninky</span></div>
           <div class="result-title"><mark>AI</mark> pro projektové manažery – praktický kurz</div>
-          <div class="result-desc">Naučte se využívat AI nástroje v každodenní práci PM. Praktický kurz s důrazem na reálné nasazení v průmyslových projektech včetně automotive a výroby.</div>
-          <div class="result-tags">
-            <span class="tag">Know-how</span>
-            <span class="tag">Kurz</span>
-            <span class="tag">AI</span>
-          </div>
+          <div class="result-desc">Naučte se využívat AI nástroje v každodenní práci PM. Praktický kurz bez iluzí, s důrazem na reálné nasazení.</div>
+          <div class="result-tags"><span class="tag">Kurz</span><span class="tag">AI</span></div>
         </div>
       </div>
 
-      <!-- Result 5 – Pro firmy -->
       <div class="result-item">
-        <div class="result-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-          </svg>
-        </div>
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <div class="result-content">
-          <div class="result-breadcrumb">Pro firmy <span>› Konzultace</span></div>
-          <div class="result-title">Nastavení <mark>AI</mark> strategie pro průmyslové firmy a <mark>automotive</mark></div>
-          <div class="result-desc">Pomáháme firmám z výrobního sektoru nastavit strategii pro nasazení AI — od definice use cases přes výběr technologií až po řízení transformačního portfolia.</div>
-          <div class="result-tags">
-            <span class="tag">Pro firmy</span>
-            <span class="tag">Strategie</span>
-            <span class="tag">AI</span>
-            <span class="tag">Industry 4.0</span>
-          </div>
+          <div class="result-breadcrumb">Know-how <span>› Webinář</span></div>
+          <div class="result-title">Webinář: <mark>AI</mark> v průmyslu – jak řídit projekty digitální transformace</div>
+          <div class="result-desc">Online setkání pro PM a lídry. Konkrétní use cases nasazení AI ve výrobě a dodavatelských řetězcích.</div>
+          <div class="result-tags"><span class="tag">Webinář</span><span class="tag">AI</span><span class="tag">Zdarma</span></div>
         </div>
       </div>
 
-    </div>
-    </div><!-- /tab-panel vysledky -->
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Know-how <span>› Článek</span></div>
+          <div class="result-title">Jak <mark>AI</mark> mění roli projektového manažera</div>
+          <div class="result-desc">Analýza toho, jak automatizace a AI ovlivňují každodenní práci PM a které dovednosti budou klíčové v příštích letech.</div>
+          <div class="result-tags"><span class="tag">Článek</span><span class="tag">AI</span><span class="tag">Trendy</span></div>
+        </div>
+      </div>
 
-  </div>
+      <div class="result-item">
+        <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <div class="result-content">
+          <div class="result-breadcrumb">Know-how <span>› Šablona</span></div>
+          <div class="result-title">Šablona: <mark>AI</mark> readiness assessment pro projektové týmy</div>
+          <div class="result-desc">Checklist pro posouzení připravenosti procesů, dat a kompetencí vašeho týmu na práci s AI.</div>
+          <div class="result-tags"><span class="tag">Šablona</span><span class="tag">AI</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results-area -->
 
   <script>
-    function switchTab(id, btn) {
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      btn.classList.add('active');
+    const input = document.getElementById('searchInput');
+    const dropdown = document.getElementById('suggestionsDropdown');
+    const container = document.getElementById('searchContainer');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultsArea = document.getElementById('resultsArea');
+    const sugDefault = document.getElementById('sugDefault');
+    const sugTyping = document.getElementById('sugTyping');
+
+    // Detekce kontextu z URL parametru
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromContext = urlParams.get('from');
+    const isProfirmy = fromContext === 'profirmy';
+
+    // Nastavení loga podle kontextu
+    if (isProfirmy) {
+      document.getElementById('logoLink').href = 'profirmy.html';
+    }
+
+    // Přeřazení skupin výsledků podle kontextu
+    if (isProfirmy) {
+      const order = ['Pro firmy', 'Know-how', 'Pro profesionály'];
+      order.forEach(name => {
+        const g = resultsArea.querySelector(`[data-category="${name}"]`);
+        if (g) resultsArea.appendChild(g);
+      });
+    }
+
+    // Simulovaná data pro našeptávač – výchozí pořadí
+    const suggestionsDefault = [
+      { t: 'Projektový manažer pro AI projekty',         m: 'Pro profesionály › Kariéra',          c: 'Pro profesionály' },
+      { t: 'Řízení AI iniciativ – outsourcing PM',       m: 'Pro firmy › Outsourcing PM',           c: 'Pro firmy' },
+      { t: 'AI Hackathon',                               m: 'Know-how › Akce › Hackathon',          c: 'Know-how', rec: true },
+      { t: 'AI pro projektové manažery – kurz',          m: 'Know-how › Kurzy a tréninky',          c: 'Know-how' },
+      { t: 'Nastavení AI strategie pro firmy',           m: 'Pro firmy › Konzultace',               c: 'Pro firmy' },
+    ];
+
+    // Návrhy přeřazené pro kontext Pro firmy
+    const suggestionsProfirmy = [
+      { t: 'Řízení AI iniciativ – outsourcing PM',       m: 'Pro firmy › Outsourcing PM',           c: 'Pro firmy' },
+      { t: 'Nastavení AI strategie pro firmy',           m: 'Pro firmy › Konzultace',               c: 'Pro firmy' },
+      { t: 'AI Hackathon',                               m: 'Know-how › Akce › Hackathon',          c: 'Know-how', rec: true },
+      { t: 'AI pro projektové manažery – kurz',          m: 'Know-how › Kurzy a tréninky',          c: 'Know-how' },
+      { t: 'Projektový manažer pro AI projekty',         m: 'Pro profesionály › Kariéra',           c: 'Pro profesionály' },
+    ];
+
+    const suggestions = isProfirmy ? suggestionsProfirmy : suggestionsDefault;
+
+    input.addEventListener('focus', () => {
+      container.classList.add('focused');
+      dropdown.classList.add('visible');
+      if (!input.value.trim()) {
+        sugDefault.style.display = 'block';
+        sugTyping.style.display = 'none';
+      }
+    });
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim();
+      clearBtn.style.display = q ? 'block' : 'none';
+
+      if (!q) {
+        sugDefault.style.display = 'block';
+        sugTyping.style.display = 'none';
+        resultsArea.classList.remove('visible');
+        return;
+      }
+
+      // Našeptávač: zobraz návrhy
+      sugDefault.style.display = 'none';
+      sugTyping.style.display = 'block';
+      document.getElementById('sugLabel').textContent = `Návrhy pro „${q}"`;
+
+      const highlight = (text) => text.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>');
+      const ids = ['s1','s2','s3','s4','s5'];
+      suggestions.forEach((s, i) => {
+        document.getElementById(ids[i]+'t').innerHTML = highlight(s.t);
+        document.getElementById(ids[i]+'m').textContent = s.m;
+        if (document.getElementById(ids[i]+'c')) document.getElementById(ids[i]+'c').textContent = s.c;
+      });
+
+      // Zobraz výsledky
+      resultsArea.classList.add('visible');
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+      if (e.key === 'Escape') closeDropdown();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!container.closest('.search-bar-wrapper').contains(e.target)) closeDropdown();
+    });
+
+    function closeDropdown() {
+      dropdown.classList.remove('visible');
+      container.classList.remove('focused');
+    }
+
+    function clearSearch() {
+      input.value = '';
+      clearBtn.style.display = 'none';
+      resultsArea.classList.remove('visible');
+      sugDefault.style.display = 'block';
+      sugTyping.style.display = 'none';
+      input.focus();
+    }
+
+    function selectSuggestion(text) {
+      input.value = text;
+      closeDropdown();
+      clearBtn.style.display = 'block';
+      resultsArea.classList.add('visible');
+    }
+
+    function doSearch() {
+      closeDropdown();
+      if (input.value.trim()) resultsArea.classList.add('visible');
     }
   </script>
 
