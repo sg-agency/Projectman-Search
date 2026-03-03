@@ -66,7 +66,7 @@
     .result-breadcrumb span { color: #777777; }
     .result-title { font-size: 15px; font-weight: 600; color: #333333; margin-bottom: 4px; line-height: 1.35; }
     .result-title mark { background: none; font-weight: 800; color: #333333; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
-    .result-desc { font-size: 13px; color: #666666; line-height: 1.55; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .result-desc { font-size: 13px; color: #666666; line-height: 1.55; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .result-tags { display: flex; gap: 5px; flex-wrap: wrap; }
     .tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; border: 1.5px solid #DDDDDD; color: #555555; background: #FFFFFF; }
     .tag.dark { background: #777777; color: #FFFFFF; border-color: #777777; }
@@ -81,6 +81,14 @@
     .rec-title { font-size: 15px; font-weight: 700; color: #333333; margin-bottom: 4px; line-height: 1.35; }
     .rec-desc { font-size: 13px; color: #555555; line-height: 1.55; margin-bottom: 7px; }
     .rec-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+    /* STRÁNKOVÁNÍ */
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 40px 0 64px; }
+    .page-btn { min-width: 36px; height: 36px; padding: 0 10px; border: 1.5px solid #DDDDDD; background: #FFFFFF; border-radius: 6px; font-size: 13px; font-weight: 600; color: #555555; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .page-btn:hover { border-color: #999999; color: #333333; }
+    .page-btn.active { background: #555555; color: #FFFFFF; border-color: #555555; }
+    .page-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+    .page-info { font-size: 12px; color: #999999; margin: 0 8px; }
 
     svg { display: block; }
   </style>
@@ -106,7 +114,7 @@
   <!-- SEARCH BAR -->
   <div class="search-area">
     <div class="search-bar-wrapper">
-      <p class="search-label">Hledejte v Projectmanu...</p>
+      <p class="search-label">Hledejte v&nbsp;Projectmanu...</p>
       <div class="search-input-container" id="searchContainer">
         <div class="search-input-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
         <input class="search-input" id="searchInput" type="text" placeholder="Hledat témata, pozice, materiály...">
@@ -137,10 +145,10 @@
             </div>
             <span class="sug-badge">Doporučené</span>
           </div>
-          <div class="sug-item recommended" onclick="selectSuggestion('PMpod: Vláďa Beran – šéf PMO, AI ambasador a muzikant')">
+          <div class="sug-item recommended" onclick="selectSuggestion('PMpod: Vláďa Beran – šéf PMO, AI ambasador a&nbsp;muzikant')">
             <div class="sug-icon rec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
             <div class="sug-content">
-              <div class="sug-title">PMpod: Vláďa Beran – šéf PMO, AI ambasador a muzikant, co dává grády hudbě i projektům</div>
+              <div class="sug-title">PMpod: Vláďa Beran – šéf PMO, AI ambasador a&nbsp;muzikant, co dává grády hudbě i&nbsp;projektům</div>
               <div class="sug-meta">Know-how › Podcast</div>
             </div>
             <span class="sug-badge">Doporučené</span>
@@ -172,7 +180,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Pro profesionály <span>› Kariéra</span></div>
           <div class="result-title">Projektový manažer pro <mark>AI</mark> projekty</div>
-          <div class="result-desc">Hledáme zkušeného projektového manažera pro vedení AI implementačních projektů u předních firem v ČR. Náplní práce je koordinace vývojových týmů, řízení harmonogramu a komunikace se stakeholdery. Zkušenost s agilními metodikami a prostředím průmyslových projektů výhodou.</div>
+          <div class="result-desc">Hledáme zkušeného projektového manažera pro vedení AI implementačních projektů u&nbsp;předních firem v&nbsp;ČR. Náplní práce je koordinace vývojových týmů, řízení harmonogramu a&nbsp;komunikace se stakeholdery. Zkušenost s&nbsp;agilními metodikami a&nbsp;prostředím průmyslových projektů výhodou.</div>
           <div class="result-tags"><span class="tag">Kariéra</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -182,7 +190,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Pro profesionály <span>› Profil experta</span></div>
           <div class="result-title"><mark>AI</mark> Product Owner – expert na platformy strojového učení</div>
-          <div class="result-desc">Zkušený Product Owner specializující se na AI/ML produkty a datové platformy. Má za sebou vedení produktového týmu ve scaleup prostředí a spolupráci s výzkumnými institucemi. Dostupný pro projekty od Q2 2026, preferuje dlouhodobou spolupráci.</div>
+          <div class="result-desc">Zkušený Product Owner specializující se na AI/ML produkty a&nbsp;datové platformy. Má za sebou vedení produktového týmu ve scaleup prostředí a&nbsp;spolupráci s&nbsp;výzkumnými institucemi. Dostupný pro projekty od Q2 2026, preferuje dlouhodobou spolupráci.</div>
           <div class="result-tags"><span class="tag">Profil</span><span class="tag">AI</span><span class="tag">Product Owner</span></div>
         </div>
       </div>
@@ -191,8 +199,8 @@
         <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="result-content">
           <div class="result-breadcrumb">Pro profesionály <span>› Komunita</span></div>
-          <div class="result-title">Síť expertů na <mark>AI</mark> v projektovém řízení</div>
-          <div class="result-desc">Propojte se s odborníky, kteří aktivně pracují na AI projektech a sdílejí praktické zkušenosti z různých odvětví. Komunita sdružuje projektové manažery, produktové lídry i konzultanty. Pravidelná setkání, mentoring a diskuzní fórum dostupné po registraci.</div>
+          <div class="result-title">Síť expertů na <mark>AI</mark> v&nbsp;projektovém řízení</div>
+          <div class="result-desc">Propojte se s&nbsp;odborníky, kteří aktivně pracují na AI projektech a&nbsp;sdílejí praktické zkušenosti z&nbsp;různých odvětví. Komunita sdružuje projektové manažery, produktové lídry i&nbsp;konzultanty. Pravidelná setkání, mentoring a&nbsp;diskuzní fórum dostupné po registraci.</div>
           <div class="result-tags"><span class="tag">Komunita</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -210,7 +218,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Pro firmy <span>› Outsourcing PM</span></div>
           <div class="result-title">Řízení <mark>AI</mark> iniciativ – outsourcing projektového managementu</div>
-          <div class="result-desc">Posilujeme delivery kapacity firem, které nestíhají řídit rostoucí portfolio AI iniciativ vlastními silami. Naši projektoví manažeři se zapojí do vašich týmů a převezmou koordinaci 20+ projektů napříč odděleními. Flexibilní model spolupráce — od jednorázového zastoupení po dlouhodobý outsourcing.</div>
+          <div class="result-desc">Posilujeme delivery kapacity firem, které nestíhají řídit rostoucí portfolio AI iniciativ vlastními silami. Naši projektoví manažeři se zapojí do vašich týmů a&nbsp;převezmou koordinaci 20+ projektů napříč odděleními. Flexibilní model spolupráce — od jednorázového zastoupení po dlouhodobý outsourcing.</div>
           <div class="result-tags"><span class="tag">Outsourcing PM</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -220,7 +228,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Pro firmy <span>› Konzultace</span></div>
           <div class="result-title">Nastavení <mark>AI</mark> strategie pro firmy</div>
-          <div class="result-desc">Pomáháme firmám nastavit smysluplnou strategii pro nasazení AI — od identifikace konkrétních use cases přes výběr vhodných technologií až po nastavení governance a řízení transformačního portfolia. Výsledkem je realizovatelný plán, ne jen prezentace.</div>
+          <div class="result-desc">Pomáháme firmám nastavit smysluplnou strategii pro nasazení AI — od identifikace konkrétních use cases přes výběr vhodných technologií až po nastavení governance a&nbsp;řízení transformačního portfolia. Výsledkem je realizovatelný plán, ne jen prezentace.</div>
           <div class="result-tags"><span class="tag">Strategie</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -230,7 +238,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Pro firmy <span>› Case study</span></div>
           <div class="result-title">Case study: nasazení <mark>AI</mark> do agendy projektového portfolia</div>
-          <div class="result-desc">Jak jsme pomohli přední finanční instituci zavést AI nástroje do každodenního řízení portfolia čítajícího 20+ projektů. Automatizace reportingu snížila administrativní zátěž o 40 % a uvolnila kapacity PM týmu pro strategičtější práci. Přečtěte si, jak celý projekt probíhal krok za krokem.</div>
+          <div class="result-desc">Jak jsme pomohli přední finanční instituci zavést AI nástroje do každodenního řízení portfolia čítajícího 20+ projektů. Automatizace reportingu snížila administrativní zátěž o&nbsp;40 % a&nbsp;uvolnila kapacity PM týmu pro strategičtější práci. Přečtěte si, jak celý projekt probíhal krok za krokem.</div>
           <div class="result-tags"><span class="tag">Case study</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -249,7 +257,7 @@
         <div class="result-content">
           <div class="rec-header"><span class="rec-badge">Doporučené</span><span class="rec-breadcrumb">Know-how <span>› Akce › Hackathon</span></span></div>
           <div class="rec-title">AI Hackathon – Umělá inteligence na reálném projektu</div>
-          <div class="rec-desc">Intenzivní týmový workshop, kde si vyzkoušíte práci s AI na skutečném projektu z praxe. Pracujete v malých týmech, hledáte nápady, tvoříte prototypy a soutěžíte o nejlepší řešení. Ideální pro manažery, kteří chtějí AI zažít, ne jen o ní slyšet.</div>
+          <div class="rec-desc">Intenzivní týmový workshop, kde si vyzkoušíte práci s&nbsp;AI na skutečném projektu z&nbsp;praxe. Pracujete v&nbsp;malých týmech, hledáte nápady, tvoříte prototypy a&nbsp;soutěžíte o&nbsp;nejlepší řešení. Ideální pro manažery, kteří chtějí AI zažít, ne jen o&nbsp;ní slyšet.</div>
           <div class="rec-tags"><span class="tag dark">AI</span><span class="tag">Workshop</span><span class="tag">Inovace</span></div>
         </div>
       </div>
@@ -258,8 +266,8 @@
         <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <div class="result-content">
           <div class="result-breadcrumb">Know-how <span>› Článek</span></div>
-          <div class="result-title"><mark>AI</mark> v projektovém řízení – kde začít?</div>
-          <div class="result-desc">Přehled konkrétních nástrojů a přístupů, jak začít využívat umělou inteligenci v každodenní práci projektového manažera — bez nutnosti technického zázemí. Od automatizace rutinních úkolů po AI asistenty na plánování a řízení rizik.</div>
+          <div class="result-title"><mark>AI</mark> v&nbsp;projektovém řízení – kde začít?</div>
+          <div class="result-desc">Přehled konkrétních nástrojů a&nbsp;přístupů, jak začít využívat umělou inteligenci v&nbsp;každodenní práci projektového manažera — bez nutnosti technického zázemí. Od automatizace rutinních úkolů po AI asistenty na plánování a&nbsp;řízení rizik.</div>
           <div class="result-tags"><span class="tag">Článek</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -267,9 +275,9 @@
       <div class="result-item">
         <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <div class="result-content">
-          <div class="result-breadcrumb">Know-how <span>› Kurzy a tréninky</span></div>
+          <div class="result-breadcrumb">Know-how <span>› Kurzy a&nbsp;tréninky</span></div>
           <div class="result-title"><mark>AI</mark> pro projektové manažery – praktický kurz</div>
-          <div class="result-desc">Naučte se využívat AI nástroje přímo v každodenní práci projektového manažera. Kurz je postavený na reálných scénářích — žádné teorie navíc, jen to, co skutečně funguje. Účastníci odcházejí s konkrétními nástroji a návyky, které mohou druhý den použít v praxi.</div>
+          <div class="result-desc">Naučte se využívat AI nástroje přímo v&nbsp;každodenní práci projektového manažera. Kurz je postavený na reálných scénářích — žádné teorie navíc, jen to, co skutečně funguje. Účastníci odcházejí s&nbsp;konkrétními nástroji a&nbsp;návyky, které mohou druhý den použít v&nbsp;praxi.</div>
           <div class="result-tags"><span class="tag">Kurz</span><span class="tag">AI</span></div>
         </div>
       </div>
@@ -278,8 +286,8 @@
         <div class="result-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <div class="result-content">
           <div class="result-breadcrumb">Know-how <span>› Webinář</span></div>
-          <div class="result-title">Webinář: <mark>AI</mark> v průmyslu – jak řídit projekty digitální transformace</div>
-          <div class="result-desc">Online setkání pro projektové manažery a lídry digitální transformace. Zaměřujeme se na konkrétní use cases nasazení AI ve výrobě, automotive a průmyslových dodavatelských řetězcích. Účast zdarma, nutná registrace předem.</div>
+          <div class="result-title">Webinář: <mark>AI</mark> v&nbsp;průmyslu – jak řídit projekty digitální transformace</div>
+          <div class="result-desc">Online setkání pro projektové manažery a&nbsp;lídry digitální transformace. Zaměřujeme se na konkrétní use cases nasazení AI ve výrobě, automotive a&nbsp;průmyslových dodavatelských řetězcích. Účast zdarma, nutná registrace předem.</div>
           <div class="result-tags"><span class="tag">Webinář</span><span class="tag">AI</span><span class="tag">Zdarma</span></div>
         </div>
       </div>
@@ -289,7 +297,7 @@
         <div class="result-content">
           <div class="result-breadcrumb">Know-how <span>› Článek</span></div>
           <div class="result-title">Jak <mark>AI</mark> mění roli projektového manažera</div>
-          <div class="result-desc">Analytický pohled na to, jak automatizace a AI postupně mění každodenní práci projektového manažera a co to znamená pro rozvoj kariéry. Které dovednosti zůstanou klíčové a které úkoly AI časem převezme? Článek vychází z rozhovorů s 30 PM z různých odvětví.</div>
+          <div class="result-desc">Analytický pohled na to, jak automatizace a&nbsp;AI postupně mění každodenní práci projektového manažera a&nbsp;co to znamená pro rozvoj kariéry. Které dovednosti zůstanou klíčové a&nbsp;které úkoly AI časem převezme? Článek vychází z&nbsp;rozhovorů s&nbsp;30 PM z&nbsp;různých odvětví.</div>
           <div class="result-tags"><span class="tag">Článek</span><span class="tag">AI</span><span class="tag">Trendy</span></div>
         </div>
       </div>
@@ -299,13 +307,21 @@
         <div class="result-content">
           <div class="result-breadcrumb">Know-how <span>› Šablona</span></div>
           <div class="result-title">Šablona: <mark>AI</mark> readiness assessment pro projektové týmy</div>
-          <div class="result-desc">Strukturovaný checklist pro posouzení připravenosti procesů, dat a kompetencí vašeho týmu na práci s AI. Šablona pokrývá technickou, organizační i lidskou dimenzi. Stáhněte zdarma a použijte jako výchozí bod pro AI audit ve vaší firmě.</div>
+          <div class="result-desc">Strukturovaný checklist pro posouzení připravenosti procesů, dat a&nbsp;kompetencí vašeho týmu na práci s&nbsp;AI. Šablona pokrývá technickou, organizační i&nbsp;lidskou dimenzi. Stáhněte zdarma a&nbsp;použijte jako výchozí bod pro AI audit ve vaší firmě.</div>
           <div class="result-tags"><span class="tag">Šablona</span><span class="tag">AI</span></div>
         </div>
       </div>
     </div>
 
   </div><!-- /results-area -->
+
+  <!-- STRÁNKOVÁNÍ -->
+  <div class="pagination" id="pagination" style="display:none;">
+    <button class="page-btn" id="pagePrev" onclick="changePage(currentPage - 1)">&#8592;</button>
+    <div id="pageButtons" style="display:flex;gap:6px;"></div>
+    <button class="page-btn" id="pageNext" onclick="changePage(currentPage + 1)">&#8594;</button>
+    <span class="page-info" id="pageInfo"></span>
+  </div>
 
   <script>
     const input = document.getElementById('searchInput');
@@ -441,12 +457,71 @@
       input.value = text;
       closeDropdown();
       clearBtn.style.display = 'block';
-      resultsArea.classList.add('visible');
+      showResults();
     }
 
     function doSearch() {
       closeDropdown();
-      if (input.value.trim()) resultsArea.classList.add('visible');
+      if (input.value.trim()) showResults();
+    }
+
+    // --- STRÁNKOVÁNÍ ---
+    const ITEMS_PER_PAGE = 10;
+    let currentPage = 1;
+    let allResultItems = [];
+
+    function showResults() {
+      resultsArea.classList.add('visible');
+      // Sesbírej všechny výsledky (rec-item + result-item)
+      allResultItems = Array.from(resultsArea.querySelectorAll('.result-item, .rec-item'));
+      currentPage = 1;
+      renderPage();
+    }
+
+    function renderPage() {
+      const total = allResultItems.length;
+      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+
+      allResultItems.forEach((item, i) => {
+        item.style.display = (i >= start && i < end) ? '' : 'none';
+      });
+
+      // Schovat prázdné category-group hlavičky
+      resultsArea.querySelectorAll('.category-group').forEach(group => {
+        const visible = Array.from(group.querySelectorAll('.result-item, .rec-item')).some(el => el.style.display !== 'none');
+        group.style.display = visible ? '' : 'none';
+      });
+
+      // Stránkování zobrazit jen pokud je víc než 1 stránka
+      const pagination = document.getElementById('pagination');
+      if (totalPages <= 1) { pagination.style.display = 'none'; return; }
+      pagination.style.display = 'flex';
+
+      // Tlačítka stránek
+      const btns = document.getElementById('pageButtons');
+      btns.innerHTML = '';
+      for (let p = 1; p <= totalPages; p++) {
+        const b = document.createElement('button');
+        b.className = 'page-btn' + (p === currentPage ? ' active' : '');
+        b.textContent = p;
+        b.onclick = () => changePage(p);
+        btns.appendChild(b);
+      }
+
+      document.getElementById('pagePrev').disabled = currentPage === 1;
+      document.getElementById('pageNext').disabled = currentPage === totalPages;
+      document.getElementById('pageInfo').textContent = `${start + 1}–${Math.min(end, total)} z ${total}`;
+    }
+
+    function changePage(p) {
+      const total = allResultItems.length;
+      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+      if (p < 1 || p > totalPages) return;
+      currentPage = p;
+      renderPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
 
